@@ -1,50 +1,53 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup, SoupStrainer
 import requests
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
 
-def open_random_wikipedia_article():
-    driver = webdriver.Chrome()
-    driver.get("https://en.wikipedia.org/wiki/John_Locke")
-    return driver
+def article_selector(url): 
 
-def finder(driver):
-    while True:
-        page_source = driver.page_source
-        soup = BeautifulSoup(page_source, 'html.parser')
+    n = 0
 
-        title_tag = soup.find('title')
-        print(title_tag.text.strip())
+    while n < 10:
+        n += 1
 
-        if title_tag.text.strip() == "Philosophy - Wikipedia":
-            print("Reached Philosophy page!")
+        html = requests.get(url)
+
+        soup = BeautifulSoup(html.content, 'html.parser')
+
+        title_text = soup.find('title').text
+        
+        # Find the main content div
+        main_content = soup.find(id="mw-content-text")
+
+        # Find all paragraphs
+        paragraphs = main_content.find_all('p')
+
+        # Filter paragraphs that don't contain a span with a title attribute and exclude infobox paragraphs
+
+        selected_paragraphs = []
+        for p in paragraphs:
+            if not p.get('class') == ['mw-empty-elt']: selected_paragraphs.append(p)
+
+
+        print(selected_paragraphs[0].text)
+        print(selected_paragraphs[0].get('class'))
+
+        #update the url with the first link href
+
+        if title_text == 'Philosophy - Wikipedia':
+
+            print("You made it to Philosophy!")
+            print ("That took " + str(n) + " steps.")
+
             break
 
-        link = soup.findAll('a', class_="mw-redirect")
 
-        print(link)
-
-        if link:
-            link_xpath = "//a[@class='mw-redirect' and @href='" + link[1].get('href') + "']"
-            # Wait for the link to be clickable
-            link_element = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, link_xpath))
-            )
-
-            link_element.click()
-
-            # Wait for the page to be updated
-            WebDriverWait(driver, 10).until(EC.staleness_of(link_element))
-
-        else:
-            print("No link found with the specified criteria.")
+        #url = "https://en.wikipedia.org" + first_link.get('href')
+    return
 
 def main():
-    driver = open_random_wikipedia_article()
-    finder(driver)
+    url = 'https://en.wikipedia.org/wiki/Special:Random'
 
-if __name__ == "__main__":
-    main()
+    article_selector(url)
+
+    return
+
+if __name__ == "__main__": main()
