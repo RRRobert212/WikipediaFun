@@ -1,6 +1,3 @@
-#this works in theory but the biggest problem now is that it's going to the wikipedia main page whenever it's clicking a reference link, and then it just does down the same path everytime
-#it needs to not click reference links, i.e. exclude links in brackets
-
 import requests
 from bs4 import BeautifulSoup
 
