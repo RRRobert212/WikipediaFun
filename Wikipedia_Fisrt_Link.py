@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 def article_selector(url): 
 
-    n = 0
+    n = -1
 
     while True:
         n += 1
@@ -15,19 +15,21 @@ def article_selector(url):
 
         soup = BeautifulSoup(html.content, 'html.parser')
 
-        title_text = soup.find('title').text
+
+
+        #selects paragraphs from main text content and filters them for known exclusions
+        def filter_paragraphs():
+
+            main_content = soup.find(id="mw-content-text")   
+            paragraphs = main_content.findAll('p')
+
+            selected_paragraphs = []
+            for p in paragraphs:
+                if not p.get('class') == ['mw-empty-elt']: selected_paragraphs.append(p)
+
+            return selected_paragraphs
         
-        # Find the main content div
-        main_content = soup.find(id="mw-content-text")
-
-        # Find all paragraphs
-        paragraphs = main_content.findAll('p')
-
-        # Filter paragraphs that don't contain a span with a title attribute and exclude infobox paragraphs
-
-        selected_paragraphs = []
-        for p in paragraphs:
-            if not p.get('class') == ['mw-empty-elt']: selected_paragraphs.append(p)
+        selected_paragraphs = filter_paragraphs()
 
 
 
@@ -59,26 +61,23 @@ def article_selector(url):
         
         first_link = select_first_link()
 
-
-        
-        print(soup.find('title').text)
-        #print(first_link)
-
-
-        #print(selected_paragraphs[0].text)
-
+        #make title readable
+        title_text = soup.find('title').text[:-12]
         
 
-        if title_text == 'Philosophy - Wikipedia':
 
+        #check if we are at the Philosophy page, if so stop, and say how long it took to get there.
+        if title_text == 'Philosophy':
+
+            print(title_text)
             print("You made it to Philosophy!")
             print ("That took " + str(n) + " steps.")
 
             break
 
 
-        #update the url with the first link href
-
+        #print the page title and update the url with our first_link
+        print(title_text)
         url = "https://en.wikipedia.org" + first_link.get('href')
     return
 
