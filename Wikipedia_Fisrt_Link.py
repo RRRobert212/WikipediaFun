@@ -21,7 +21,7 @@ def article_selector(url):
         main_content = soup.find(id="mw-content-text")
 
         # Find all paragraphs
-        paragraphs = main_content.find_all('p')
+        paragraphs = main_content.findAll('p')
 
         # Filter paragraphs that don't contain a span with a title attribute and exclude infobox paragraphs
 
@@ -31,28 +31,38 @@ def article_selector(url):
 
 
 
-        #instead let's do the same thing, find all links in the first paragraph and then choose the good ones also, if there aren't any, check the next paragraph
-
-        links = selected_paragraphs[0].findAll('a')
 
 
+        #filters links for exclusions, things like citations, IPA links, etc. add to this when you encounter errors
+        def filter_links(links):
+            selected_links = []
+            for l in links:
+                if (l.get('href', '').startswith('/wiki/') and
+                        not (l.get('href', '').startswith('/wiki/Help:IPA') or 
+                            l.get('href', '').startswith('/wiki/File:')
+                        )): selected_links.append(l)
 
-        #this might be better but it also needs to exclude IPA links about pronunciation, they contain 'IPA'
-        print(links)
-        selected_links = []
-        for l in links:
-            if not l.get('href', '').startswith('#cite_note-'): selected_links.append(l)
+            return selected_links
 
 
-        print(selected_links)
+        #gets list of filtered links from 1st paragraph, chooses the 1st one as our "first link" if 1st paragraph has no links, chooses the next paragraph
+        def select_first_link():
+            valid_links = []
+            i = 0
+            while len(valid_links) == 0:
+                valid_links = filter_links(selected_paragraphs[i].findAll('a'))
+                i += 1
+
+            first_link = valid_links[0]
+
+            return first_link
+        
+        first_link = select_first_link()
 
 
-        #link we click is the first of the links that fit our qualifications
-        first_link = selected_links[0]
         
         print(soup.find('title').text)
         #print(first_link)
-        #print(href)
 
 
         #print(selected_paragraphs[0].text)
