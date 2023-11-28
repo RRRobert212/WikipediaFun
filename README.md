@@ -1,4 +1,4 @@
-A Python program that goes to a random Wikipedia article and selects the first link that redirects to another Wikipedia article.
+A Python program that goes to a random Wikipedia article and selects the first link that redirects to another Wikipedia article. To run, just execute the .py file. Dependent on requests and bs4. pip install requests, pip install bs4 if you don't have these.
 
 In theory, this should almost always lead to the Philosophy article being selected within a reasonable number of steps, probably less than 30?
 
