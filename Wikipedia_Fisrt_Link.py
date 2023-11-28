@@ -1,3 +1,6 @@
+#this works in theory but the biggest problem now is that it's going to the wikipedia main page whenever it's clicking a reference link, and then it just does down the same path everytime
+#it needs to not click reference links, i.e. exclude links in brackets
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -5,7 +8,7 @@ def article_selector(url):
 
     n = 0
 
-    while n < 10:
+    while True:
         n += 1
 
         html = requests.get(url)
@@ -27,10 +30,34 @@ def article_selector(url):
             if not p.get('class') == ['mw-empty-elt']: selected_paragraphs.append(p)
 
 
-        print(selected_paragraphs[0].text)
-        print(selected_paragraphs[0].get('class'))
 
-        #update the url with the first link href
+        #instead let's do the same thing, find all links in the first paragraph and then choose the good ones also, if there aren't any, check the next paragraph
+
+        links = selected_paragraphs[0].findAll('a')
+
+
+
+        #this might be better but it also needs to exclude IPA links about pronunciation, they contain 'IPA'
+        print(links)
+        selected_links = []
+        for l in links:
+            if not l.get('href', '').startswith('#cite_note-'): selected_links.append(l)
+
+
+        print(selected_links)
+
+
+        #link we click is the first of the links that fit our qualifications
+        first_link = selected_links[0]
+        
+        print(soup.find('title').text)
+        #print(first_link)
+        #print(href)
+
+
+        #print(selected_paragraphs[0].text)
+
+        
 
         if title_text == 'Philosophy - Wikipedia':
 
@@ -40,7 +67,9 @@ def article_selector(url):
             break
 
 
-        #url = "https://en.wikipedia.org" + first_link.get('href')
+        #update the url with the first link href
+
+        url = "https://en.wikipedia.org" + first_link.get('href')
     return
 
 def main():
