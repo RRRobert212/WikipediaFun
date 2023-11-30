@@ -1,6 +1,8 @@
 
 import requests
 from bs4 import BeautifulSoup
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def article_selector(url): 
 
@@ -95,15 +97,41 @@ def article_selector(url):
         #print the page title and update the url with our first_link
         print(title_text)
         url = "https://en.wikipedia.org" + first_link.get('href')
-    return
+    return title_list
+
+#graphs the results in a directional graph where articles are vertices and links between them are directed edges
+def graph_results(all_title_lists):
+    G = nx.MultiDiGraph()
+
+    for titles in all_title_lists:
+        for title in titles:
+            G.add_node(title)
+
+    for titles in all_title_lists:
+        for i in range(len(titles) - 1):
+            G.add_edge(titles[i], titles[i + 1])
+
+    # Use circular_layout for a more structured layout
+    pos = nx.circular_layout(G)
+
+    nx.draw(G, pos, with_labels=True, font_weight='bold', node_size=700, node_color='skyblue', font_size=8, edge_color='gray', width=0.2)
+    plt.show()
+    
+
 
 def main():
-    url = 'https://en.wikipedia.org/wiki/Special:Random'
+    num_iterations = 5
+    all_title_lists = []
 
-    article_selector(url)
+    for i in range(num_iterations):
+        url = 'https://en.wikipedia.org/wiki/Special:Random'
+        title_list = article_selector(url)
+        all_title_lists.append(title_list)
 
-    return
+    G = graph_results(all_title_lists)
+    nx.draw_spring(G, with_labels=True)
+    plt.show()
 
-#if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
 
-for i in range(30): main()
