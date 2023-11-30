@@ -9,7 +9,7 @@ def article_selector(url):
 
     while True:
         n += 1
-
+ 
         html = requests.get(url)
 
         soup = BeautifulSoup(html.content, 'html.parser')
@@ -38,12 +38,12 @@ def article_selector(url):
         def filter_links(links):
             selected_links = []
             #these links can't be included because they appear as the first link in tons of articles, may need to add to this
-            excluded_hrefs = ["/wiki/Arabic_language", "/wiki/Ancient_Greek_language", "/wiki/Ancient_Greek", "/wiki/Latin", "/wiki/Latin_language", "/wiki/Russian_language", 
+            excluded_hrefs = ["/wiki/Arabic_language", "/wiki/Ancient_Greek_language", "/wiki/Ancient_Greek", "/wiki/Greek_language", "/wiki/Latin", "/wiki/Latin_language", "/wiki/Russian_language", 
                               "/wiki/Devanagari", "/wiki/Hindi_language", "wiki/Hindi", "/wiki/Spanish_language", "/wiki/French_language", "wiki/M%C4%81ori_language",
                               "/wiki/German_language", "/wiki/American_English", "/wiki/British_English", "/wiki/English_language", "/wiki/Persian_language", "/wiki/Hungaran_language",
                               "/wiki/Korean_language", "/wiki/Simplified_Chinese_characters", "/wiki/Traditional_Chinese_characters", "/wiki/Chinese_characters", "/wiki/Pinyin", "/wiki/Chinese_language",
                               "/wiki/Japanese_language", "/wiki/Italian_language", "/wiki/Portugese_language", "/wiki/Romanian_language", "/wiki/Danish_language", "/wiki/Swedish_language",
-                              "/wiki/Norwegian_language"]
+                              "/wiki/Norwegian_language", "/wiki/Ukranian_language", "/wiki/Czech_language", "/wiki/Old_French", "/wiki/Northern_Sami_language"]
             for l in links:
                 href = l.get('href','')
                 if (href.startswith('/wiki/') and
@@ -64,9 +64,10 @@ def article_selector(url):
                 valid_links = filter_links(selected_paragraphs[i].findAll('a'))
                 i += 1
 
-            first_link = valid_links[0]
-
-            return first_link
+            if len(valid_links) > 0:
+                first_link = valid_links[0]
+                return first_link
+            else: return None
         
         first_link = select_first_link()
 
@@ -76,7 +77,7 @@ def article_selector(url):
         #loop identifier, adds all links to a list and if there are repeats, breaks and claims it's a loop
         if title_text in title_list:
             print(title_text)
-            print("A loop has occured!")
+            print("A loop has occured!\n")
             break
         title_list.append(title_text)
 
@@ -105,4 +106,4 @@ def main():
 
 #if __name__ == "__main__": main()
 
-for i in range(3): main()
+for i in range(30): main()
