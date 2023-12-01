@@ -120,7 +120,7 @@ def graph_results(all_title_lists):
 
 
 def main():
-    num_iterations = 5
+    num_iterations = 3
     all_title_lists = []
 
     for i in range(num_iterations):
