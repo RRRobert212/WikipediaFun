@@ -111,8 +111,8 @@ def graph_results(all_title_lists):
         for i in range(len(titles) - 1):
             G.add_edge(titles[i], titles[i + 1])
 
-    # graph layout, change to look pretty
-    pos = nx.spring_layout(G)
+    # Use circular_layout for a more structured layout
+    pos = nx.circular_layout(G)
 
     nx.draw(G, pos, with_labels=True, font_weight='bold', node_size=700, node_color='skyblue', font_size=8, edge_color='gray', width=0.2)
     plt.show()
