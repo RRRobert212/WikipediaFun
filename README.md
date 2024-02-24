@@ -15,4 +15,4 @@ The program may be edited to allow these language articles to be selected by cha
 The program may also be edited to have a different target article. It may be interesting to see how quickly different articles can be reached. Do some articles have a lower average number of steps to reach than "Philosophy"?
 Perhaps the "Science" article. It is often reached before the "Philosophy" article.
 
-In the future, I would like to create some kind of graphical interpretation of this program. A vertex for "Philosophy" in the middle, with different vertices representing different articles, and edges representing directional paths between them.
+The program also produces a graph showing the linked articles. It's interesting to note where they converge before they reach philosophy. The style needs to be improved, it doesn't look great and it's hard to read with more than 2 or 3 iterations.
