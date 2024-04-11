@@ -45,7 +45,7 @@ def article_selector(url):
                               "/wiki/German_language", "/wiki/American_English", "/wiki/British_English", "/wiki/English_language", "/wiki/Persian_language", "/wiki/Hungaran_language",
                               "/wiki/Korean_language", "/wiki/Simplified_Chinese_characters", "/wiki/Traditional_Chinese_characters", "/wiki/Chinese_characters", "/wiki/Pinyin", "/wiki/Chinese_language",
                               "/wiki/Japanese_language", "/wiki/Italian_language", "/wiki/Portugese_language", "/wiki/Romanian_language", "/wiki/Danish_language", "/wiki/Swedish_language",
-                              "/wiki/Norwegian_language", "/wiki/Ukranian_language", "/wiki/Czech_language", "/wiki/Old_French", "/wiki/Northern_Sami_language", "/wiki/Sinhala_language"]
+                              "/wiki/Norwegian_language", "/wiki/Ukranian_language", "/wiki/Czech_language", "/wiki/Old_French", "/wiki/Northern_Sami_language", "/wiki/Sinhala_language", "/wiki/Hebrew_language",]
             for l in links:
                 href = l.get('href','')
                 if (href.startswith('/wiki/') and
